@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemaAnalytics.Infrastructure", "WemaAnalytics.Infrastructure\WemaAnalytics.Infrastructure.csproj", "{EA0BBE4D-A701-4079-B309-850191D6550D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemaAnalytics.Domain", "WemaAnalytics.Domain\WemaAnalytics.Domain.csproj", "{A8959B74-2E6D-4FE8-BE27-9DDDDD12FE16}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemaAnalytics.Application", "WemaAnalytics.Application\WemaAnalytics.Application.csproj", "{683BE9CD-C5EA-41F8-81FE-76744174D3FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemaAnalytics.API", "WemaAnalytics.API\WemaAnalytics.API.csproj", "{7813AC27-1DA1-4717-9E1F-BDF1F8E541A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemaAnalytics.Tests", "WemaAnalytics.Tests\WemaAnalytics.Tests.csproj", "{1C7700AF-C7BD-4B4C-BB8E-2D1F1078D41A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA0BBE4D-A701-4079-B309-850191D6550D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA0BBE4D-A701-4079-B309-850191D6550D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA0BBE4D-A701-4079-B309-850191D6550D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA0BBE4D-A701-4079-B309-850191D6550D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8959B74-2E6D-4FE8-BE27-9DDDDD12FE16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8959B74-2E6D-4FE8-BE27-9DDDDD12FE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8959B74-2E6D-4FE8-BE27-9DDDDD12FE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8959B74-2E6D-4FE8-BE27-9DDDDD12FE16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683BE9CD-C5EA-41F8-81FE-76744174D3FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683BE9CD-C5EA-41F8-81FE-76744174D3FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683BE9CD-C5EA-41F8-81FE-76744174D3FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683BE9CD-C5EA-41F8-81FE-76744174D3FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7813AC27-1DA1-4717-9E1F-BDF1F8E541A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7813AC27-1DA1-4717-9E1F-BDF1F8E541A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7813AC27-1DA1-4717-9E1F-BDF1F8E541A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7813AC27-1DA1-4717-9E1F-BDF1F8E541A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C7700AF-C7BD-4B4C-BB8E-2D1F1078D41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C7700AF-C7BD-4B4C-BB8E-2D1F1078D41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C7700AF-C7BD-4B4C-BB8E-2D1F1078D41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C7700AF-C7BD-4B4C-BB8E-2D1F1078D41A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6DC50D1-F8F7-4358-88E0-BCA9D8C1B74B}
+	EndGlobalSection
+EndGlobal
