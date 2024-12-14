@@ -12,8 +12,8 @@ using WemaAnalytics.Infrastructure.Data.DbContexts;
 namespace WemaAnalytics.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    [Migration("20241212090728_Initial")]
-    partial class Initial
+    [Migration("20241214203435_ll")]
+    partial class ll
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,6 +203,9 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Property<Guid>("SOLId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ZoneEntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
@@ -210,6 +213,8 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.HasIndex("ClusterEntityId");
 
                     b.HasIndex("SOLId");
+
+                    b.HasIndex("ZoneEntityId");
 
                     b.ToTable("AccountOfficers", (string)null);
                 });
@@ -222,9 +227,18 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClusterId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -267,13 +281,19 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("RegionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SOLId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StaffId")
                         .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -282,7 +302,16 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<Guid?>("ZoneId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ClusterId");
+
+                    b.HasIndex("DirectorateId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -291,6 +320,12 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("RegionId");
+
+                    b.HasIndex("SOLId");
+
+                    b.HasIndex("ZoneId");
 
                     b.ToTable("WemaAnalyticUsers", (string)null);
                 });
@@ -334,12 +369,22 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid?>("RegionEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SOLId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ZoneId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClusterId");
+
+                    b.HasIndex("RegionEntityId");
+
+                    b.HasIndex("SOLId");
 
                     b.HasIndex("ZoneId");
 
@@ -393,10 +438,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -428,9 +469,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
 
                     b.ToTable("Directorates", (string)null);
                 });
@@ -505,7 +543,7 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SOLId")
+                    b.Property<int>("SOLCode")
                         .HasMaxLength(3)
                         .HasColumnType("int");
 
@@ -697,12 +735,55 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.HasOne("WemaAnalytics.Domain.Entities.SOLEntity", "SOL")
                         .WithMany("AccountOfficers")
                         .HasForeignKey("SOLId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.ZoneEntity", null)
+                        .WithMany("AccountOfficers")
+                        .HasForeignKey("ZoneEntityId");
 
                     b.Navigation("Branch");
 
                     b.Navigation("SOL");
+                });
+
+            modelBuilder.Entity("WemaAnalytics.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("WemaAnalytics.Domain.Entities.BranchEntity", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.ClusterEntity", "Cluster")
+                        .WithMany()
+                        .HasForeignKey("ClusterId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.DirectorateEntity", "Directorate")
+                        .WithMany("ApplicationUser")
+                        .HasForeignKey("DirectorateId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.RegionEntity", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.SOLEntity", "SOL")
+                        .WithMany()
+                        .HasForeignKey("SOLId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.ZoneEntity", "Zone")
+                        .WithMany()
+                        .HasForeignKey("ZoneId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Cluster");
+
+                    b.Navigation("Directorate");
+
+                    b.Navigation("Region");
+
+                    b.Navigation("SOL");
+
+                    b.Navigation("Zone");
                 });
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.BranchEntity", b =>
@@ -711,13 +792,24 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ClusterId");
 
+                    b.HasOne("WemaAnalytics.Domain.Entities.RegionEntity", null)
+                        .WithMany("Branches")
+                        .HasForeignKey("RegionEntityId");
+
+                    b.HasOne("WemaAnalytics.Domain.Entities.SOLEntity", "SOL")
+                        .WithMany()
+                        .HasForeignKey("SOLId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("WemaAnalytics.Domain.Entities.ZoneEntity", "Zone")
                         .WithMany("Branches")
                         .HasForeignKey("ZoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cluster");
+
+                    b.Navigation("SOL");
 
                     b.Navigation("Zone");
                 });
@@ -731,17 +823,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Region");
-                });
-
-            modelBuilder.Entity("WemaAnalytics.Domain.Entities.DirectorateEntity", b =>
-                {
-                    b.HasOne("WemaAnalytics.Domain.Entities.ApplicationUser", "ApplicationUser")
-                        .WithOne("Directorate")
-                        .HasForeignKey("WemaAnalytics.Domain.Entities.DirectorateEntity", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.RegionEntity", b =>
@@ -766,11 +847,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Navigation("Region");
                 });
 
-            modelBuilder.Entity("WemaAnalytics.Domain.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("Directorate");
-                });
-
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.BranchEntity", b =>
                 {
                     b.Navigation("AccountOfficers");
@@ -783,11 +859,15 @@ namespace WemaAnalytics.Infrastructure.Migrations
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.DirectorateEntity", b =>
                 {
+                    b.Navigation("ApplicationUser");
+
                     b.Navigation("Regions");
                 });
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.RegionEntity", b =>
                 {
+                    b.Navigation("Branches");
+
                     b.Navigation("Clusters");
 
                     b.Navigation("Zones");
@@ -800,6 +880,8 @@ namespace WemaAnalytics.Infrastructure.Migrations
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.ZoneEntity", b =>
                 {
+                    b.Navigation("AccountOfficers");
+
                     b.Navigation("Branches");
                 });
 #pragma warning restore 612, 618

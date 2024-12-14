@@ -18,12 +18,25 @@ public class BranchEntityConfig : BaseEntityConfig<BranchEntity>
             .IsRequired()
             .HasMaxLength(100);
 
-
+        // Configure Zone relationship
         builder
             .HasOne(b => b.Zone)
             .WithMany(z => z.Branches)
-            .HasForeignKey(b => b.ZoneId) // Specifies ZoneId as the foreign key
-            .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete or restrict
+            .HasForeignKey(b => b.ZoneId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        // Configure SOL relationship
+        builder
+            .HasOne(b => b.SOL)
+            .WithMany() // No navigation property from SOL to BranchEntity
+            .HasForeignKey(b => b.SOLId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+           .HasOne(b => b.SOL)
+           .WithOne(s => s.Branch) // One-to-one relationship
+           .HasForeignKey<BranchEntity>(b => b.SOLId) // Foreign Key in BranchEntity
+           .OnDelete(DeleteBehavior.Cascade); // Optional: Define delete behavior
     }
 }

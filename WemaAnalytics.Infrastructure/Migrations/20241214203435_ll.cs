@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WemaAnalytics.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class ll : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,11 +26,30 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Directorates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DirectorateCode = table.Column<int>(type: "int", maxLength: 4, nullable: false),
+                    DirectorateName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Directorates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SOLEntities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SOLId = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    SOLCode = table.Column<int>(type: "int", maxLength: 3, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -70,34 +89,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WemaAnalyticUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StaffId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WemaAnalyticUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -114,117 +105,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_WemaAnalyticUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "WemaAnalyticUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_WemaAnalyticUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "WemaAnalyticUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_WemaAnalyticUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "WemaAnalyticUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_WemaAnalyticUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "WemaAnalyticUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Directorates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DirectorateCode = table.Column<int>(type: "int", maxLength: 4, nullable: false),
-                    DirectorateName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Directorates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Directorates_WemaAnalyticUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "WemaAnalyticUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -316,6 +196,8 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     BranchName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClusterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SOLId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegionEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -332,11 +214,22 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         principalTable: "Clusters",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Branches_Regions_RegionEntityId",
+                        column: x => x.RegionEntityId,
+                        principalTable: "Regions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Branches_SOLEntities_SOLId",
+                        column: x => x.SOLId,
+                        principalTable: "SOLEntities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Branches_Zones_ZoneId",
                         column: x => x.ZoneId,
                         principalTable: "Zones",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -349,6 +242,7 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SOLId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClusterEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ZoneEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -375,6 +269,160 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         column: x => x.SOLId,
                         principalTable: "SOLEntities",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AccountOfficers_Zones_ZoneEntityId",
+                        column: x => x.ZoneEntityId,
+                        principalTable: "Zones",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WemaAnalyticUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StaffId = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DirectorateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ZoneId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClusterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SOLId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WemaAnalyticUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_Clusters_ClusterId",
+                        column: x => x.ClusterId,
+                        principalTable: "Clusters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_Directorates_DirectorateId",
+                        column: x => x.DirectorateId,
+                        principalTable: "Directorates",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_Regions_RegionId",
+                        column: x => x.RegionId,
+                        principalTable: "Regions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_SOLEntities_SOLId",
+                        column: x => x.SOLId,
+                        principalTable: "SOLEntities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WemaAnalyticUsers_Zones_ZoneId",
+                        column: x => x.ZoneId,
+                        principalTable: "Zones",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_WemaAnalyticUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "WemaAnalyticUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_WemaAnalyticUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "WemaAnalyticUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_WemaAnalyticUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "WemaAnalyticUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_WemaAnalyticUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "WemaAnalyticUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -392,6 +440,11 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "IX_AccountOfficers_SOLId",
                 table: "AccountOfficers",
                 column: "SOLId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountOfficers_ZoneEntityId",
+                table: "AccountOfficers",
+                column: "ZoneEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -426,6 +479,16 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 column: "ClusterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Branches_RegionEntityId",
+                table: "Branches",
+                column: "RegionEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branches_SOLId",
+                table: "Branches",
+                column: "SOLId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Branches_ZoneId",
                 table: "Branches",
                 column: "ZoneId");
@@ -434,12 +497,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "IX_Clusters_RegionId",
                 table: "Clusters",
                 column: "RegionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Directorates_ApplicationUserId",
-                table: "Directorates",
-                column: "ApplicationUserId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Regions_DirectorateId",
@@ -455,6 +512,36 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "EmailIndex",
                 table: "WemaAnalyticUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_BranchId",
+                table: "WemaAnalyticUsers",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_ClusterId",
+                table: "WemaAnalyticUsers",
+                column: "ClusterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_DirectorateId",
+                table: "WemaAnalyticUsers",
+                column: "DirectorateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_RegionId",
+                table: "WemaAnalyticUsers",
+                column: "RegionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_SOLId",
+                table: "WemaAnalyticUsers",
+                column: "SOLId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WemaAnalyticUsers_ZoneId",
+                table: "WemaAnalyticUsers",
+                column: "ZoneId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -494,16 +581,19 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "Visits");
 
             migrationBuilder.DropTable(
-                name: "Branches");
-
-            migrationBuilder.DropTable(
-                name: "SOLEntities");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "WemaAnalyticUsers");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
+
+            migrationBuilder.DropTable(
                 name: "Clusters");
+
+            migrationBuilder.DropTable(
+                name: "SOLEntities");
 
             migrationBuilder.DropTable(
                 name: "Zones");
@@ -513,9 +603,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Directorates");
-
-            migrationBuilder.DropTable(
-                name: "WemaAnalyticUsers");
         }
     }
 }

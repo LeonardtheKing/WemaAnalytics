@@ -19,12 +19,6 @@ public class DirectorateEntityConfig : BaseEntityConfig<DirectorateEntity>
             .HasMaxLength(100);
 
 
-        // Configure one-to-one relationship with ApplicationUser
-        builder
-            .HasOne(d => d.ApplicationUser)
-                .WithOne(u => u.Directorate)
-                .HasForeignKey<DirectorateEntity>(d => d.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete
 
         // One-to-many relationship with RegionEntity
         builder

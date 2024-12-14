@@ -9,15 +9,19 @@ public class SOLEntityConfig : IEntityTypeConfiguration<SOLEntity>
 
      
         // Properties
-        builder.Property(sol => sol.SOLId)
+        builder.Property(sol => sol.SOLCode)
                .HasMaxLength(3);
 
         // Relationships
         builder.HasMany(sol => sol.AccountOfficers)
                .WithOne(accountOfficer => accountOfficer.SOL)
                .HasForeignKey(accountOfficer => accountOfficer.SOLId)
-               .OnDelete(DeleteBehavior.Cascade); // Deletes AccountOfficers when SOL is deleted.
+               .OnDelete(DeleteBehavior.Restrict); //Does not delete AccountOfficers when SOL is deleted.
 
-        // Additional Configuration (if any)
+        builder
+           .HasOne(s => s.Branch)
+           .WithOne(b => b.SOL) // One-to-one relationship
+           .HasForeignKey<SOLEntity>(s => s.BranchId) // Foreign Key in SOLEntity
+           .OnDelete(DeleteBehavior.Cascade); // Optional: Define delete behavior
     }
 }
