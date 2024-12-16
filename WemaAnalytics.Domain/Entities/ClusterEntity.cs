@@ -14,40 +14,4 @@ public class ClusterEntity : BaseEntity
 
     }
 
-    // Factory Method: Create a ClusterEntity with Region
-    public static ClusterEntity CreateWithRegion(int clusterCode, string clusterName, RegionEntity region)
-    {
-        return new ClusterEntity
-        {
-            ClusterCode = clusterCode,
-            ClusterName = clusterName,
-            Region = region
-        };
-    }
-
-    // Factory Method: Create a ClusterEntity with Branches
-    public static ClusterEntity CreateWithBranches(
-        int clusterCode,
-        string clusterName,
-        RegionEntity region,
-        ICollection<AccountOfficerEntity> branches)
-    {
-        return new ClusterEntity
-        {
-            ClusterCode = clusterCode,
-            ClusterName = clusterName,
-            Region = region,
-            Branches = branches
-        };
-    }
-
-    // Factory Method: Create a ClusterEntity with default properties
-    public static ClusterEntity CreateDefault(int clusterCode, string clusterName)
-    {
-        return new ClusterEntity
-        {
-            ClusterCode = clusterCode,
-            ClusterName = clusterName
-        };
-    }
 }

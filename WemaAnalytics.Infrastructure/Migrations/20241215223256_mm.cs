@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WemaAnalytics.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ll : Migration
+    public partial class mm : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,24 +42,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Directorates", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SOLEntities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SOLCode = table.Column<int>(type: "int", maxLength: 3, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SOLEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,17 +201,36 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         principalTable: "Regions",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Branches_SOLEntities_SOLId",
-                        column: x => x.SOLId,
-                        principalTable: "SOLEntities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Branches_Zones_ZoneId",
                         column: x => x.ZoneId,
                         principalTable: "Zones",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SOLEntities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SOLCode = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SOLEntities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SOLEntities_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -484,11 +485,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 column: "RegionEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Branches_SOLId",
-                table: "Branches",
-                column: "SOLId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Branches_ZoneId",
                 table: "Branches",
                 column: "ZoneId");
@@ -502,6 +498,12 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "IX_Regions_DirectorateId",
                 table: "Regions",
                 column: "DirectorateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SOLEntities_BranchId",
+                table: "SOLEntities",
+                column: "BranchId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Visits_StaffEmail",
@@ -587,13 +589,13 @@ namespace WemaAnalytics.Infrastructure.Migrations
                 name: "WemaAnalyticUsers");
 
             migrationBuilder.DropTable(
+                name: "SOLEntities");
+
+            migrationBuilder.DropTable(
                 name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Clusters");
-
-            migrationBuilder.DropTable(
-                name: "SOLEntities");
 
             migrationBuilder.DropTable(
                 name: "Zones");

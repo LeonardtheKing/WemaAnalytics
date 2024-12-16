@@ -16,15 +16,6 @@ public class RegionEntity : BaseEntity
     {
 
     }
-    
+     
+   }
 
-    // Factory Method: Create a RegionEntity with default properties
-    public static RegionEntity CreateRegion(int regionCode, string regionName)
-    {
-        return new RegionEntity
-        {
-            RegionCode = regionCode,
-            RegionName = regionName
-        };
-    }
-}

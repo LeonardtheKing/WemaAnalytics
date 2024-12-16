@@ -16,17 +16,4 @@ public class DirectorateEntity : BaseEntity
 
     }
 
-   
-   
-
-   
-    // Factory Method: Create a DirectorateEntity with default properties
-    public static DirectorateEntity CreateDirectorate(int directorateCode, string directorateName)
-    {
-        return new DirectorateEntity
-        {
-            DirectorateCode = directorateCode,
-            DirectorateName = directorateName
-        };
-    }
 }

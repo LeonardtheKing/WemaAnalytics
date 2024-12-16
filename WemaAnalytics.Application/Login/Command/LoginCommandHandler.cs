@@ -19,7 +19,7 @@ public class LoginCommandHandler(
         var user = await userManager.FindByEmailAsync(email);
         
         var staffId  = activeDirectoryService.GetCompanyName(email);
-        var accountOfficer = activeDirectoryService.GetDepartment(email);
+        var position = activeDirectoryService.GetDepartment(email);
 
 
         if (string.IsNullOrEmpty(staffId) || staffId==null)
@@ -98,7 +98,6 @@ public class LoginCommandHandler(
                 Email = email,
                 NormalizedEmail = email.ToUpper(),
 
-
             };
 
             var createdUser = await userManager.CreateAsync(user);
@@ -113,9 +112,10 @@ public class LoginCommandHandler(
                 return BaseResponse<LoginResponse>.Unauthorized(errorString);
             }
 
-            await AssignAccountOfficerRole(user, accountOfficer);
+            await AssignAccountOfficerRole(user, position);
 
             await userManager.AddToRoleAsync(user, Roles.ROLE_ADMIN);
+            
         }
 
         // Manually create the authentication ticket and JWT token
@@ -140,7 +140,7 @@ public class LoginCommandHandler(
         var refreshToken = await jwtManager.GenerateRefreshToken();
         var name = $"{user.FirstName} {user.LastName}";
         var userRole = userRoles.FirstOrDefault();
-        var loginResponse = new LoginResponse(name, email, token, refreshToken, userRole, staffId);
+        var loginResponse = new LoginResponse(name, email, token, refreshToken, userRole, staffId, position);
 
         return   BaseResponse<LoginResponse>.Success(loginResponse,"Login succesful",true);
     }

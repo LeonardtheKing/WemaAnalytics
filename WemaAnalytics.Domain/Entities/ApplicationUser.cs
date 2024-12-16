@@ -26,5 +26,4 @@ public class ApplicationUser : IdentityUser
     public SOLEntity? SOL { get; set; }
 
 
-
 }

@@ -12,8 +12,8 @@ using WemaAnalytics.Infrastructure.Data.DbContexts;
 namespace WemaAnalytics.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    [Migration("20241214203435_ll")]
-    partial class ll
+    [Migration("20241215223256_mm")]
+    partial class mm
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -384,8 +384,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
 
                     b.HasIndex("RegionEntityId");
 
-                    b.HasIndex("SOLId");
-
                     b.HasIndex("ZoneId");
 
                     b.ToTable("Branches", (string)null);
@@ -525,6 +523,9 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -548,6 +549,9 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId")
+                        .IsUnique();
 
                     b.ToTable("SOLEntities", (string)null);
                 });
@@ -796,11 +800,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .WithMany("Branches")
                         .HasForeignKey("RegionEntityId");
 
-                    b.HasOne("WemaAnalytics.Domain.Entities.SOLEntity", "SOL")
-                        .WithMany()
-                        .HasForeignKey("SOLId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("WemaAnalytics.Domain.Entities.ZoneEntity", "Zone")
                         .WithMany("Branches")
                         .HasForeignKey("ZoneId")
@@ -808,8 +807,6 @@ namespace WemaAnalytics.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Cluster");
-
-                    b.Navigation("SOL");
 
                     b.Navigation("Zone");
                 });
@@ -836,6 +833,17 @@ namespace WemaAnalytics.Infrastructure.Migrations
                     b.Navigation("Directorate");
                 });
 
+            modelBuilder.Entity("WemaAnalytics.Domain.Entities.SOLEntity", b =>
+                {
+                    b.HasOne("WemaAnalytics.Domain.Entities.BranchEntity", "Branch")
+                        .WithOne("SOL")
+                        .HasForeignKey("WemaAnalytics.Domain.Entities.SOLEntity", "BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.ZoneEntity", b =>
                 {
                     b.HasOne("WemaAnalytics.Domain.Entities.RegionEntity", "Region")
@@ -850,6 +858,9 @@ namespace WemaAnalytics.Infrastructure.Migrations
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.BranchEntity", b =>
                 {
                     b.Navigation("AccountOfficers");
+
+                    b.Navigation("SOL")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WemaAnalytics.Domain.Entities.ClusterEntity", b =>
